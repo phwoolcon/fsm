@@ -1,2 +1,1 @@
-# fsm
-Phwoolcon state machine
+# Phwoolcon Finite State Machine
