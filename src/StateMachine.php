@@ -7,7 +7,7 @@ use Closure;
  * Class StateMachine
  * @package Phwoolcon\Fsm
  *
- * @method string do(string $action)
+ * @method string do(string $action, mixed &$payload = null)
  * @method string init(string $action)
  * @method string next(string $action)
  */
@@ -66,18 +66,18 @@ class StateMachine
         return call_user_func_array([$this, $name . 'Action'], $arguments);
     }
 
-    public function addTransition($fromState, $action, $payload)
+    public function addTransition($fromState, $action, $toState)
     {
-        $this->transitions[$fromState][$action] = $payload;
+        $this->transitions[$fromState][$action] = $toState;
     }
 
-    public function doAction($action)
+    public function doAction($action, &$payload = null)
     {
         if (!isset($this->transitions[$this->currentState][$action])) {
             throw new Exception(sprintf('Invalid action "%s" for current state "%s"', $action, $this->currentState));
         }
         if (($state = $this->transitions[$this->currentState][$action]) instanceof Closure) {
-            $state = $state($this);
+            $state = $state($this, $payload);
         }
         $this->previousState = $this->currentState;
         $this->currentState = $state;
@@ -90,6 +90,11 @@ class StateMachine
         return $this->currentState;
     }
 
+    /**
+     * @param string $name
+     * @param array  $transitions
+     * @return static
+     */
     public static function getInstance($name, $transitions = [])
     {
         isset(static::$instances[$name]) or static::$instances[$name] = new static($transitions);
@@ -113,7 +118,7 @@ class StateMachine
         if (count($transition = $this->transitions[$this->currentState]) != 1) {
             throw new Exception('Unable to call next on a forked state');
         }
-        foreach ($transition as $action => $payload) {
+        foreach ($transition as $action => $toState) {
             return $this->doAction($action);
         }
         return $this->currentState;
