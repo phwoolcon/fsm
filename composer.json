@@ -1,0 +1,20 @@
+{
+    "name": "phwoolcon/fsm",
+    "description": "Phwoolcon Finite State Machine",
+    "keywords": ["phwoolcon", "state machine", "fsm"],
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Christopher CHEN",
+            "email": "fishdrowned@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "autoload": {
+        "psr-4": {"Phwoolcon\\Fsm\\": "src"}
+    }
+}
