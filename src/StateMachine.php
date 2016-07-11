@@ -79,6 +79,12 @@ class StateMachine
         return new static($transitions, $history);
     }
 
+    /**
+     * @param string $action
+     * @param mixed  $payload
+     * @return string Next state
+     * @throws Exception
+     */
     public function doAction($action, &$payload = null)
     {
         if (!isset($this->transitions[$this->currentState][$action])) {
@@ -119,6 +125,10 @@ class StateMachine
         return $this->currentState = $this->initState;
     }
 
+    /**
+     * @return string Next state
+     * @throws Exception
+     */
     public function nextAction()
     {
         if (!isset($this->transitions[$this->currentState]) ||

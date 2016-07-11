@@ -154,4 +154,22 @@ class StateMachineTest extends PHPUnit_Framework_TestCase
         $fsm->do('process2');
         $this->assertEquals($step2, $fsm->getCurrentState());
     }
+
+    public function testDemonstration()
+    {
+        $fsm = StateMachine::create([
+            'foo' => [
+                'process' => 'bar',
+            ],
+            'bar' => [
+                'process2' => 'hello',
+                'process3' => 'world',
+            ],
+        ]);
+        ob_start();
+        echo $fsm->getCurrentState();   // prints foo
+        echo $fsm->next();              // prints bar
+        echo $fsm->do('process2');      // prints hello
+        $this->assertEquals(implode('', ['foo', 'bar', 'hello']), ob_get_clean());
+    }
 }
