@@ -1,3 +1,4 @@
 /.idea/
 /vendor/
 /ignore/
+/tests/root/storage/
