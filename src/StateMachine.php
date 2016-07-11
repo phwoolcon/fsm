@@ -74,6 +74,11 @@ class StateMachine
     }
     */
 
+    public function canDoAction($action)
+    {
+        return isset($this->transitions[$this->currentState][$action]);
+    }
+
     public static function create(array $transitions, array $history = [])
     {
         return new static($transitions, $history);
@@ -87,7 +92,7 @@ class StateMachine
      */
     public function doAction($action, &$payload = null)
     {
-        if (!isset($this->transitions[$this->currentState][$action])) {
+        if (!$this->canDoAction($action)) {
             throw new Exception(
                 sprintf('Invalid action "%s" for current state "%s"', $action, $this->currentState),
                 Exception::INVALID_ACTION

@@ -34,6 +34,18 @@ class StateMachineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($history, $fsm->getHistory());
     }
 
+    public function testCanDoAction()
+    {
+        $fsm = StateMachine::create([
+            $start = 'foo' => [
+                'process' => $to = 'bar',
+            ],
+        ]);
+        $this->assertEquals($start, $fsm->getCurrentState());
+        $this->assertTrue($fsm->canDoAction('process'));
+        $this->assertFalse($fsm->canDoAction('invalid'));
+    }
+
     public function testDoAction()
     {
         $fsm = StateMachine::create([
