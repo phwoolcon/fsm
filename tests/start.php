@@ -1,14 +1,10 @@
 <?php
 
-use Phalcon\Di\FactoryDefault;
-
 error_reporting(-1);
 $_SERVER['PHWOOLCON_ENV'] = 'testing';
 
 define('TEST_ROOT_PATH', __DIR__ . '/root');
 
-// The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
-$di = new FactoryDefault();
 $_SERVER['PHWOOLCON_ROOT_PATH'] = TEST_ROOT_PATH;
 $_SERVER['PHWOOLCON_CONFIG_PATH'] = TEST_ROOT_PATH . '/app/config';
 
