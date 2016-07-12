@@ -9,7 +9,7 @@ See the definition of [Finite-state machine](https://en.wikipedia.org/wiki/Finit
 Add this library to your project by composer:
 
 ```
-composer require "phwoolcon/fsm":"dev-master"
+composer require "phwoolcon/fsm"
 ```
 
 ## Usage
