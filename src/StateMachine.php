@@ -126,7 +126,7 @@ class StateMachine
             $currentState = end($history);
             return $this->currentState = $currentState['state'];
         }
-        $this->history[] = ['action' => 'init', 'state' => $this->initState];
+        $this->history[] = ['time' => time(), 'action' => 'init', 'state' => $this->initState];
         return $this->currentState = $this->initState;
     }
 
