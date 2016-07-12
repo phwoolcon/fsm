@@ -3,6 +3,15 @@
 [![Code Coverage](https://codecov.io/gh/phwoolcon/fsm/branch/master/graph/badge.svg)](https://codecov.io/gh/phwoolcon/fsm)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+See the definition of [Finite-state machine](https://en.wikipedia.org/wiki/Finite-state_machine) on Wikipedia
+
+## Installation
+Add this library to your project by composer:
+
+```
+composer require "phwoolcon/fsm":"dev-master"
+```
+
 ## Usage
 
 ```php
