@@ -184,4 +184,31 @@ class StateMachineTest extends PHPUnit_Framework_TestCase
         echo $fsm->do('process2');      // prints hello
         $this->assertEquals(implode('', ['foo', 'bar', 'hello']), ob_get_clean());
     }
+
+    public function testHistory()
+    {
+        $fsm = StateMachine::create([
+            $start = 'foo' => [
+                'process1' => $step1 = 'bar',
+            ],
+            $step1 => [
+                'process2' => $step2 = 'hello',
+            ],
+        ]);
+        $this->assertEquals($start, $fsm->getCurrentState());
+        $fsm->nextAction();
+        $this->assertEquals($step1, $fsm->getCurrentState());
+        $fsm->nextAction();
+        $this->assertEquals($step2, $fsm->getCurrentState());
+        $this->assertCount(3, $fsm->getHistory());
+        $historicalActions = ['init', 'process1', 'process2'];
+        $historicalStates = ['foo', 'bar', 'hello'];
+        foreach ($fsm->getHistory() as $k => $v) {
+            $this->assertArrayHasKey('time', $v);
+            $this->assertArrayHasKey('action', $v);
+            $this->assertArrayHasKey('state', $v);
+            $this->assertEquals($historicalActions[$k], $v['action']);
+            $this->assertEquals($historicalStates[$k], $v['state']);
+        }
+    }
 }

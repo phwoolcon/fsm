@@ -103,7 +103,7 @@ class StateMachine
         }
         $this->previousState = $this->currentState;
         $this->currentState = $state;
-        $this->history[] = ['action' => $action, 'state' => $state];
+        $this->history[] = ['time' => time(), 'action' => $action, 'state' => $state];
         return $state;
     }
 
