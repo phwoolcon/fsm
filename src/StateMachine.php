@@ -24,7 +24,8 @@ class StateMachine
      * StateMachine constructor.
      * @param array      $transitions
      *
-     * $transitions example:
+     * $transitions example for a deterministic finite state machine:
+     * https://en.wikipedia.org/wiki/Deterministic_finite_automaton
      *  [
      *      'State1' => [
      *          'action1' => 'State1',
@@ -38,20 +39,22 @@ class StateMachine
      *      ],
      *  ]
      *
-     * You may use Closure to do real actions in the target state:
+     * $transitions example for a nondeterministic finite state machine:
+     * https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton
+     * You may use a `Closure` or a `callable array` to perform checks before transitioning, e.g.:
      *  [
-     *      'State1' => [
-     *          'action1' => 'State1',
-     *          'action2' => 'State1',
+     *      'locked' => [
+     *          'push' => 'locked',
+     *          // use callable array:
+     *          'coin' => [Turnstile::class, 'insertCoin'],
      *      ],
-     *      'State2' => [
-     *          'action3' => function ($stateMachine) {
-     *              // Do something here
-     *              return 'State3';
+     *      'unlocked' => [
+     *          // use closure:
+     *          'push' => function ($stateMachine) {
+     *              Turnstile::useCoin();
+     *              return Turnstile::hasCoin() ? 'unlocked' : 'locked';
      *          },
-     *      ],
-     *      'State3' => [
-     *          'action4' => 'State1',
+     *          'coin' => [$turnstile, 'insertCoin'],
      *      ],
      *  ]
      * @param array|null $history
@@ -98,8 +101,17 @@ class StateMachine
                 Exception::INVALID_ACTION
             );
         }
-        if (($state = $this->transitions[$this->currentState][$action]) instanceof Closure) {
-            $state = $state($this, $payload);
+        $state = $this->transitions[$this->currentState][$action];
+        if (!is_string($state)) {
+            if (is_callalbe($state)) {
+                $state = call_user_func($state, $this, $payload);
+            }
+        }
+        if (!is_string($state) || !isset($this->transitions[$state])) {
+            throw new Exception(
+                sprintf('Invalid action "%s" for current state "%s"', $action, $this->currentState),
+                Exception::INVALID_ACTION
+            );
         }
         $this->previousState = $this->currentState;
         $this->currentState = $state;
