@@ -103,7 +103,7 @@ class StateMachine
         }
         $state = $this->transitions[$this->currentState][$action];
         if (!is_string($state)) {
-            if (is_callalbe($state)) {
+            if (is_callable($state)) {
                 $state = call_user_func($state, $this, $payload);
             }
         }
